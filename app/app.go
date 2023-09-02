@@ -106,6 +106,15 @@ func (a *fyneApp) Lifecycle() fyne.Lifecycle {
 	return a.lifecycle
 }
 
+func (a *fyneApp) CallOnMainThread(f func()) {
+	if ap, ok := a.driver.(interface{ CallOnMainThread(func()) }); ok {
+		ap.CallOnMainThread(f)
+		return
+	}
+
+	panic("fyne: CallOnMain is not supported in the current driver.")
+}
+
 func (a *fyneApp) newDefaultPreferences() *preferences {
 	p := newPreferences(a)
 	if a.uniqueID != "" {
