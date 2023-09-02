@@ -74,6 +74,19 @@ func runOnDraw(w *window, f func()) {
 	<-done
 }
 
+// CallOnMainThread schedules the given function f to be executed on the main
+// thread. This method is implicitly exposed to the public.
+//
+// For developers who would like to call a function on the main thread,
+// one can assert if the current fyne.App have the support. For example,
+//
+//	if ap, ok := fyne.CurrentApp().(interface{ CallOnMainThread(func()) }); ok {
+//		ap.CallOnMainThread(func() { println("calls on the main thread")})
+//	}
+//
+// @author: changkun
+func (d *gLDriver) CallOnMainThread(f func()) { runOnMain(f) }
+
 func (d *gLDriver) drawSingleFrame() {
 	refreshingCanvases := make([]fyne.Canvas, 0)
 	for _, win := range d.windowList() {
